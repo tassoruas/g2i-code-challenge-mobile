@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import colors from '../helpers/colors';
 
 export default StyleSheet.create({
   appContainer: {
     flex: 1,
-    backgroundColor: '#ffffff'
+    backgroundColor: colors.lightGray
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -12,12 +13,13 @@ export default StyleSheet.create({
   },
   button: {
     fontSize: 20,
-    padding: 5
+    margin: 5
   },
   container: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-evenly'
   },
   box: {
     justifyContent: 'center',
@@ -25,8 +27,8 @@ export default StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: 'black',
-    width: 400,
-    height: 400
+    width: '80%',
+    height: '40%'
   },
   question: {
     textAlign: 'center'
@@ -35,5 +37,18 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center'
+  },
+  subTitle: {
+    fontSize: 18,
+    fontWeight: '300',
+    color: 'black',
+    textAlign: 'center'
+  },
+  resultList: { flex: 0.8, width: '95%', height: 'auto' }
 });

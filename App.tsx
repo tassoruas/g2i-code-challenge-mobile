@@ -1,7 +1,7 @@
 import React from 'react';
 import MainStack from './src/navigation/MainStack';
 import { SafeAreaView } from 'react-native';
-import styles from './src/screens/styles';
+import styles from './src/screens/screenStyles';
 // import { store } from './src/redux';
 // import { Provider } from 'react-redux';
 
