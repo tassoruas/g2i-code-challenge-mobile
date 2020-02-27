@@ -1,84 +1,103 @@
 'use strict';
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import styles from './screenStyles';
-import axios from 'axios';
 import { AllHtmlEntities } from 'html-entities';
 import { NavigationParams } from 'react-navigation';
-import GenericButton from '../components/GenericButton';
 import QuizData from '../helpers/types/QuizData';
+import axios from 'axios';
+
+// Redux
+import { connect } from 'react-redux';
+import { addDataAction, incrementResponseAction } from '../redux/actions/quizActions';
+
+// Components
+import GenericButton from '../components/GenericButton';
+
+// Styles
 import colors from '../helpers/colors';
+import styles from './screenStyles';
 
-type Props = {
+interface Props {
+  addDataAction: Function;
+  incrementResponseAction: Function;
   navigation: NavigationParams;
-};
+  quiz: any;
+}
 
-type State = {
+interface State {
   data: Array<QuizData>;
   counter: number;
   correctAnswers: Array<boolean>;
-};
+}
 
 class Quiz extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      data: undefined,
-      counter: 0,
-      correctAnswers: []
-    };
   }
 
   async componentDidMount() {
-    const quizCount = 10;
-    const difficulty = 'hard';
-    const response = await axios.get(`https://opentdb.com/api.php?amount=${quizCount}&difficulty=${difficulty}&type=boolean`, {
-      headers: { 'Content-Type': 'application/json' }
-    });
-    this.setState({ data: response.data.results });
-  }
+    try {
+      const resp = await axios.get(`https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean`, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (resp.data.toString().includes('Connection refused')) {
+        return console.error('Quiz: componentDidMount: Fetch failed from opentdb');
+      }
 
-  incrementResponse(response: boolean) {
-    if (String(response) === this.state.data[this.state.counter].correct_answer.toLowerCase()) {
-      this.state.correctAnswers.push(true);
-    } else {
-      this.state.correctAnswers.push(false);
-    }
-    if (this.state.counter == this.state.data.length - 1) {
-      this.props.navigation.navigate('Results', { data: this.state.data, correctAnswers: this.state.correctAnswers });
-    } else {
-      this.setState({ counter: this.state.counter + 1 });
+      for (const [index, result] of resp.data.results.entries()) {
+        const filteredQuestion = this.filterQuestion(result.question);
+        resp.data.results[index].question = filteredQuestion;
+      }
+
+      this.props.addDataAction(resp.data.results);
+    } catch (error) {
+      console.error('Quiz: componentDidMount:', error);
     }
   }
 
-  showQuestion(index: number) {
-    const question = this.state.data[index].question;
+  filterQuestion(question: string) {
     const entities = new AllHtmlEntities();
     const filteredQuestion = entities.decode(question);
-    this.state.data[index].question = filteredQuestion;
     return filteredQuestion;
   }
 
   render() {
-    if (this.state.data == undefined) {
+    if (!this.props.quiz.data || this.props.quiz.data.length == 0) {
       return <ActivityIndicator style={styles.spinner} />;
     }
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.state.data[this.state.counter].category}</Text>
+        <Text style={styles.title}>{this.props.quiz.data[this.props.quiz.counter].category}</Text>
         <View style={styles.box}>
-          <Text style={styles.question}>{this.showQuestion(this.state.counter)}</Text>
+          <Text style={styles.question}>{this.props.quiz.data[this.props.quiz.counter].question}</Text>
         </View>
         <Text style={styles.subTitle}>
-          {this.state.counter + 1} of {this.state.data.length}
+          {this.props.quiz.counter + 1} of {this.props.quiz.data.length}
         </Text>
         <View style={styles.buttonsContainer}>
-          <GenericButton text={'True'} onPress={() => this.incrementResponse(true)} color={colors.green} />
-          <GenericButton text={'False'} onPress={() => this.incrementResponse(false)} color={colors.red} />
+          <GenericButton
+            text={'True'}
+            onPress={() => this.props.incrementResponseAction(true, this.props.quiz.data[this.props.quiz.counter].correct_answer.toLowerCase())}
+            color={colors.green}
+          />
+          <GenericButton
+            text={'False'}
+            onPress={() => this.props.incrementResponseAction(false, this.props.quiz.data[this.props.quiz.counter].correct_answer.toLowerCase())}
+            color={colors.red}
+          />
         </View>
       </View>
     );
   }
 }
 
-export default Quiz;
+const mapState = state => ({
+  quiz: state.quiz
+});
+
+const mapDispatch = {
+  incrementResponseAction,
+  addDataAction
+};
+
+export default connect(mapState, mapDispatch)(Quiz);

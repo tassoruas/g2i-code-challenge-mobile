@@ -5,12 +5,12 @@ import QuizData from '../helpers/types/QuizData';
 import styles from './componentStyles';
 import ConditionalIconText from './ConditionalIconText';
 
-type Props = {
+interface Props {
   correctAnswers: Array<boolean>;
   data: Array<QuizData>;
   iconSize: number;
   style: StyleProp<ViewStyle>;
-};
+}
 
 class ResultList extends React.Component<Props> {
   constructor(props) {

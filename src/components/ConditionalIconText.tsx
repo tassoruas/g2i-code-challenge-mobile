@@ -3,14 +3,14 @@ import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../helpers/colors';
 
-type Props = {
+interface Props {
   trueOrFalse: boolean;
   trueIcon?: string;
   falseIcon?: string;
   trueColor?: string;
   falseColor?: string;
   iconSize?: number;
-};
+}
 
 class ConditionalIconText extends React.Component<Props> {
   constructor(props) {

@@ -1,33 +1,31 @@
 'use strict';
 import React from 'react';
 import { Text, View } from 'react-native';
-import styles from './screenStyles';
 import { NavigationParams } from 'react-navigation';
+
+// Redux
+import { connect } from 'react-redux';
+
+// Components
 import ResultList from '../components/ResultList';
-import QuizData from '../helpers/types/QuizData';
 import GenericButton from '../components/GenericButton';
+
+// Styles
 import colors from '../helpers/colors';
+import styles from './screenStyles';
 
-type Props = {
+interface Props {
   navigation: NavigationParams;
-};
+  quiz: any;
+}
 
-type State = {
-  data: Array<QuizData>;
-  correctAnswers: Array<boolean>;
-};
-
-class Results extends React.Component<Props, State> {
+class Results extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.state = {
-      data: this.props.navigation.state.params.data,
-      correctAnswers: this.props.navigation.state.params.correctAnswers
-    };
   }
 
   correctAnswersCounter() {
-    return this.state.correctAnswers.filter(item => item == true).length + '/' + this.state.correctAnswers.length;
+    return this.props.quiz.correctAnswers.filter(item => item == true).length + '/' + this.props.quiz.correctAnswers.length;
   }
 
   render() {
@@ -35,11 +33,15 @@ class Results extends React.Component<Props, State> {
       <View style={styles.container}>
         <Text style={styles.title}>You scored</Text>
         <Text style={styles.subTitle}>{this.correctAnswersCounter()}</Text>
-        <ResultList style={styles.resultList} data={this.state.data} correctAnswers={this.state.correctAnswers} iconSize={32} />
+        <ResultList style={styles.resultList} data={this.props.quiz.data} correctAnswers={this.props.quiz.correctAnswers} iconSize={32} />
         <GenericButton text="PLAY AGAIN?" onPress={() => this.props.navigation.navigate('Home')} color={colors.green} />
       </View>
     );
   }
 }
 
-export default Results;
+const mapState = state => ({
+  quiz: state.quiz
+});
+
+export default connect(mapState, null)(Results);

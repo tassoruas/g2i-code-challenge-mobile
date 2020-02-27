@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 import React from 'react';
 import { Text, TouchableHighlight } from 'react-native';
 import styles from './componentStyles';

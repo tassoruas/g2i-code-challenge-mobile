@@ -1,15 +1,26 @@
 'use strict';
 import React from 'react';
 import { Text, View } from 'react-native';
-import styles from './screenStyles';
 import { NavigationParams } from 'react-navigation';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
+import QuizData from '../helpers/types/QuizData';
+
+// Redux
+import { connect } from 'react-redux';
+import { resetScoreAction } from '../redux/actions/quizActions';
+
+// Components
 import NoConnectionModal from '../components/NoConnectionModal';
 import GenericButton from '../components/GenericButton';
+
+// Styles
 import colors from '../helpers/colors';
+import styles from './screenStyles';
 
 interface Props {
   navigation: NavigationParams;
+  quiz: any;
+  resetScoreAction: Function;
 }
 
 interface State {
@@ -51,11 +62,26 @@ class Home extends React.Component<Props, State> {
         <Text style={styles.title}>Welcome to the Trivia Challenge!</Text>
         <Text style={styles.subTitle}>You will be presented with 10 True or False questions.</Text>
         <Text style={styles.subTitle}>Can you score 100%?</Text>
-        <GenericButton color={colors.green} onPress={() => this.props.navigation.navigate('Quiz')} text="BEGIN" />
-        <Text style={styles.subTitle}>Best Score: </Text>
+        <GenericButton
+          color={colors.green}
+          onPress={() => {
+            this.props.resetScoreAction();
+            this.props.navigation.navigate('Quiz');
+          }}
+          text="BEGIN"
+        />
+        <Text style={styles.subTitle}>Best Score: {this.props.quiz.bestScore}</Text>
       </View>
     );
   }
 }
 
-export default Home;
+const mapState = state => ({
+  quiz: state.quiz
+});
+
+const mapDispatch = {
+  resetScoreAction
+};
+
+export default connect(mapState, mapDispatch)(Home);

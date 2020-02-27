@@ -1,6 +1,8 @@
 'use strict';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
+
+// Screens
 import Home from '../screens/Home';
 import Quiz from '../screens/Quiz';
 import Results from '../screens/Results';
@@ -16,7 +18,6 @@ const MainStack = createStackNavigator(
       ...TransitionPresets.DefaultTransition
     }
   }
-  // MainStackConfig
 );
 
 export default createAppContainer(MainStack);
