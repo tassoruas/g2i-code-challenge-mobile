@@ -1,24 +1,21 @@
 import { QuizActions } from '../types/quizTypes';
 import * as types from '../types/quizTypes';
 import NavigationService from '../../helpers/NavigationService';
+import { difficulty } from '../../helpers/dataTypes/QuizDifficulty';
 
 const INITIAL_STATE = {
   answersCount: 10,
-  bestScore: 0,
-  correctAnswers: new Array(),
+  correctAnswers: [],
   counter: 0,
-  data: new Array()
+  data: [],
+  difficulty: difficulty.hard
 };
 
-const STATE = JSON.parse(JSON.stringify(INITIAL_STATE));
-
-const quizReducer = (state = STATE, action: QuizActions) => {
+const quizReducer = (state = INITIAL_STATE, action: QuizActions) => {
   switch (action.type) {
     case types.ADD_DATA:
       return { ...state, data: action.payload };
-    case types.ADD_SCORE:
-      return { ...state, bestScore: state.bestScore + action.payload };
-    case types.RESET_SCORE:
+    case types.RESTART:
       return INITIAL_STATE;
     case types.INCREMENT_RESPONSE:
       const { response, correctAnswer } = action.payload;
@@ -34,9 +31,9 @@ export { quizReducer };
 function incrementResponse(payload, state) {
   if (state.correctAnswers.length != state.answersCount) {
     if (String(payload.response) === payload.correctAnswer) {
-      state.correctAnswers.push(true);
+      state.correctAnswers = [...state.correctAnswers, true];
     } else {
-      state.correctAnswers.push(false);
+      state.correctAnswers = [...state.correctAnswers, false];
     }
   }
   if (state.counter == state.answersCount - 1) {

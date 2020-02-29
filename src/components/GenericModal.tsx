@@ -1,14 +1,16 @@
-'use strict'
+'use strict';
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './componentStyles';
 
 interface Props {
+  text: string;
   isVisible: boolean;
+  showActivityIndicator?: boolean;
 }
 
-export default class NoConnectionModal extends React.Component<Props> {
+export default class GenericModal extends React.Component<Props> {
   constructor(props) {
     super(props);
   }
@@ -17,8 +19,8 @@ export default class NoConnectionModal extends React.Component<Props> {
     return (
       <Modal isVisible={this.props.isVisible}>
         <View style={styles.modalViewNoConnection}>
-          <Text style={styles.modalTitle}>Oops... Seems like you are not connected to the internet</Text>
-          <ActivityIndicator />
+          <Text style={styles.modalTitle}>{this.props.text}</Text>
+          {this.props.showActivityIndicator == true ? <ActivityIndicator /> : null}
         </View>
       </Modal>
     );

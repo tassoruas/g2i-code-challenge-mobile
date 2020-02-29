@@ -27,10 +27,10 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   genericButton: {
-    maxHeight: dimensions.fullHeight * 0.06,
-    minHeight: dimensions.fullHeight * 0.035,
-    borderRadius: 80,
-    minWidth: 150,
+    maxHeight: dimensions.fullHeight * 0.08,
+    minHeight: dimensions.fullHeight * 0.045,
+    minWidth: dimensions.fullWidth * 0.4,
+    borderRadius: 5,
     justifyContent: 'center',
     elevation: 4,
     marginLeft: 5,
@@ -40,7 +40,7 @@ export default StyleSheet.create({
   buttonText: {
     color: 'black',
     paddingBottom: 5,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '400',
     textAlign: 'center',
     paddingHorizontal: '10%',

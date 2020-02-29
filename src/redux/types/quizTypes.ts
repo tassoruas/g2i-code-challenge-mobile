@@ -1,15 +1,9 @@
-import QuizData from '../../helpers/types/QuizData';
+import QuizData from '../../helpers/dataTypes/QuizData';
 
 export const ADD_DATA = 'ADD_DATA';
 interface addDataAction {
   type: typeof ADD_DATA;
   payload: Array<QuizData>;
-}
-
-export const ADD_SCORE = 'ADD_SCORE';
-interface addScoreAction {
-  type: typeof ADD_SCORE;
-  payload: number;
 }
 
 export const INCREMENT_RESPONSE = 'INCREMENT_RESPONSE';
@@ -18,9 +12,9 @@ interface incrementResponse {
   payload: { response: boolean; correctAnswer: string };
 }
 
-export const RESET_SCORE = 'RESET_SCORE';
-interface resetScoreAction {
-  type: typeof RESET_SCORE;
+export const RESTART = 'RESTART';
+interface restartAction {
+  type: typeof RESTART;
 }
 
-export type QuizActions = addDataAction | addScoreAction | incrementResponse | resetScoreAction;
+export type QuizActions = addDataAction | incrementResponse | restartAction;

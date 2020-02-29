@@ -1,4 +1,4 @@
-export default class QuizData {
+export default interface QuizData {
   category: string;
   type: boolean;
   difficulty: string;

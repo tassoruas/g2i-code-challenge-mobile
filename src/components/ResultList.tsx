@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { FlatList, Text, View, StyleProp, ViewStyle } from 'react-native';
-import QuizData from '../helpers/types/QuizData';
+import QuizData from '../helpers/dataTypes/QuizData';
 import styles from './componentStyles';
 import ConditionalIconText from './ConditionalIconText';
 

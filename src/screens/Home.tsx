@@ -1,26 +1,25 @@
 'use strict';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, ImageBackground, Image } from 'react-native';
 import { NavigationParams } from 'react-navigation';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
-import QuizData from '../helpers/types/QuizData';
 
 // Redux
 import { connect } from 'react-redux';
-import { resetScoreAction } from '../redux/actions/quizActions';
+import { restartAction } from '../redux/actions/quizActions';
 
 // Components
-import NoConnectionModal from '../components/NoConnectionModal';
+import GenericModal from '../components/GenericModal';
 import GenericButton from '../components/GenericButton';
 
 // Styles
 import colors from '../helpers/colors';
-import styles from './screenStyles';
+import styles from './styles';
 
 interface Props {
   navigation: NavigationParams;
   quiz: any;
-  resetScoreAction: Function;
+  restartAction: Function;
 }
 
 interface State {
@@ -57,21 +56,29 @@ class Home extends React.Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <NoConnectionModal isVisible={this.state.networkErrorModalVisible} />
-        <Text style={styles.title}>Welcome to the Trivia Challenge!</Text>
-        <Text style={styles.subTitle}>You will be presented with 10 True or False questions.</Text>
-        <Text style={styles.subTitle}>Can you score 100%?</Text>
-        <GenericButton
-          color={colors.green}
-          onPress={() => {
-            this.props.resetScoreAction();
-            this.props.navigation.navigate('Quiz');
-          }}
-          text="BEGIN"
-        />
-        <Text style={styles.subTitle}>Best Score: {this.props.quiz.bestScore}</Text>
-      </View>
+      <ImageBackground style={styles.imageBackground} imageStyle={{ opacity: 0.3 }} source={require('../assets/backgroundTexture.jpg')}>
+        <View style={styles.container}>
+          <GenericModal
+            text={'Oops... Seems like you are not connected to the internet'}
+            isVisible={this.state.networkErrorModalVisible}
+            showActivityIndicator={true}
+          />
+          <Text style={styles.title}>Welcome to the Trivia Challenge!</Text>
+          <Text style={styles.subTitle}>You will be presented with 10 True or False questions.</Text>
+          <Text style={styles.subTitle}>Can you score 100%?</Text>
+          <GenericButton
+            height={50}
+            width={220}
+            textSize={20}
+            color={colors.green}
+            onPress={() => {
+              this.props.restartAction();
+              this.props.navigation.navigate('Quiz');
+            }}
+            text="BEGIN"
+          />
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -81,7 +88,7 @@ const mapState = state => ({
 });
 
 const mapDispatch = {
-  resetScoreAction
+  restartAction
 };
 
 export default connect(mapState, mapDispatch)(Home);

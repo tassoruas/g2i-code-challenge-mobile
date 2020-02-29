@@ -3,7 +3,7 @@ import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
 import { NavigationParams } from 'react-navigation';
-import QuizData from '../helpers/types/QuizData';
+import QuizData from '../helpers/dataTypes/QuizData';
 import axios from 'axios';
 
 // Redux
@@ -15,7 +15,8 @@ import GenericButton from '../components/GenericButton';
 
 // Styles
 import colors from '../helpers/colors';
-import styles from './screenStyles';
+import styles from './styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface Props {
   addDataAction: Function;
@@ -37,10 +38,13 @@ class Quiz extends React.Component<Props, State> {
 
   async componentDidMount() {
     try {
-      const resp = await axios.get(`https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean`, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-      if (resp.data.toString().includes('Connection refused')) {
+      const resp = await axios.get(
+        `https://opentdb.com/api.php?amount=${this.props.quiz.answersCount}&difficulty=${this.props.quiz.difficulty}&type=boolean`,
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+      if (resp.data.toString().includes('Connection refused') || resp.data.response_code != 0) {
         return console.error('Quiz: componentDidMount: Fetch failed from opentdb');
       }
 
@@ -55,6 +59,10 @@ class Quiz extends React.Component<Props, State> {
     }
   }
 
+  componentDidUpdate() {
+    console.log('this.props.quiz', this.props.quiz);
+  }
+
   filterQuestion(question: string) {
     const entities = new AllHtmlEntities();
     const filteredQuestion = entities.decode(question);
@@ -66,26 +74,38 @@ class Quiz extends React.Component<Props, State> {
       return <ActivityIndicator style={styles.spinner} />;
     }
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{this.props.quiz.data[this.props.quiz.counter].category}</Text>
-        <View style={styles.box}>
-          <Text style={styles.question}>{this.props.quiz.data[this.props.quiz.counter].question}</Text>
-        </View>
-        <Text style={styles.subTitle}>
-          {this.props.quiz.counter + 1} of {this.props.quiz.data.length}
-        </Text>
-        <View style={styles.buttonsContainer}>
-          <GenericButton
-            text={'True'}
-            onPress={() => this.props.incrementResponseAction(true, this.props.quiz.data[this.props.quiz.counter].correct_answer.toLowerCase())}
-            color={colors.green}
-          />
-          <GenericButton
-            text={'False'}
-            onPress={() => this.props.incrementResponseAction(false, this.props.quiz.data[this.props.quiz.counter].correct_answer.toLowerCase())}
-            color={colors.red}
-          />
-        </View>
+      <View>
+        <LinearGradient colors={['#654ea3', '#3c1053']}>
+          <View style={styles.questionContainer}>
+            <View style={styles.thirdQuestionBox}></View>
+            <View style={styles.secondQuestionBox}></View>
+            <View style={styles.questionBox}>
+              <Text style={styles.title}>{this.props.quiz.data[this.props.quiz.counter].category}</Text>
+              <Text style={styles.question}>{this.props.quiz.data[this.props.quiz.counter].question}</Text>
+              <Text style={styles.subTitle}>
+                {this.props.quiz.counter + 1} of {this.props.quiz.data.length}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <GenericButton
+              text={'True'}
+              textSize={24}
+              width={'80%'}
+              height={'23%'}
+              onPress={() => this.props.incrementResponseAction(true, this.props.quiz.data[this.props.quiz.counter].correct_answer.toLowerCase())}
+              color={colors.green}
+            />
+            <GenericButton
+              text={'False'}
+              textSize={24}
+              width={'80%'}
+              height={'23%'}
+              onPress={() => this.props.incrementResponseAction(false, this.props.quiz.data[this.props.quiz.counter].correct_answer.toLowerCase())}
+              color={colors.red}
+            />
+          </View>
+        </LinearGradient>
       </View>
     );
   }

@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, ImageBackground } from 'react-native';
 import { NavigationParams } from 'react-navigation';
 
 // Redux
@@ -12,7 +12,7 @@ import GenericButton from '../components/GenericButton';
 
 // Styles
 import colors from '../helpers/colors';
-import styles from './screenStyles';
+import styles from './styles';
 
 interface Props {
   navigation: NavigationParams;
@@ -30,12 +30,21 @@ class Results extends React.Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>You scored</Text>
-        <Text style={styles.subTitle}>{this.correctAnswersCounter()}</Text>
-        <ResultList style={styles.resultList} data={this.props.quiz.data} correctAnswers={this.props.quiz.correctAnswers} iconSize={32} />
-        <GenericButton text="PLAY AGAIN?" onPress={() => this.props.navigation.navigate('Home')} color={colors.green} />
-      </View>
+      <ImageBackground style={styles.imageBackground} imageStyle={{ opacity: 0.3 }} source={require('../assets/backgroundTexture.jpg')}>
+        <View style={styles.container}>
+          <Text style={styles.title}>You scored</Text>
+          <Text style={styles.subTitle}>{this.correctAnswersCounter()}</Text>
+          <ResultList style={styles.resultList} data={this.props.quiz.data} correctAnswers={this.props.quiz.correctAnswers} iconSize={32} />
+          <GenericButton
+            height={'10%'}
+            width={'60%'}
+            textSize={18}
+            text="PLAY AGAIN?"
+            onPress={() => this.props.navigation.navigate('Home')}
+            color={colors.midGray}
+          />
+        </View>
+      </ImageBackground>
     );
   }
 }

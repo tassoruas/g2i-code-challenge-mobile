@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Text, TouchableHighlight } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import styles from './componentStyles';
 
 interface Props {
@@ -8,17 +8,19 @@ interface Props {
   color: string;
   text: string;
   disabled?: boolean;
+  width?: any;
+  height?: any;
+  textSize?: number;
 }
 export default class GenericButton extends React.PureComponent<Props> {
   render() {
     return (
-      <TouchableHighlight
-        underlayColor={'transparent'}
-        style={[styles.genericButton, { backgroundColor: this.props.color }]}
+      <TouchableOpacity
+        style={[styles.genericButton, { backgroundColor: this.props.color, width: this.props.width, height: this.props.height }]}
         onPress={this.props.onPress}
         disabled={this.props.disabled || false}>
-        <Text style={styles.buttonText}>{this.props.text}</Text>
-      </TouchableHighlight>
+        <Text style={[styles.buttonText, { fontSize: this.props.textSize }]}>{this.props.text}</Text>
+      </TouchableOpacity>
     );
   }
 }
