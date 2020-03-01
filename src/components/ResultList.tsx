@@ -30,7 +30,12 @@ class ResultList extends React.Component<Props> {
   render() {
     return (
       <View style={this.props.style}>
-        <FlatList data={this.props.data} renderItem={this.renderListItem.bind(this)} keyExtractor={(item, index) => index.toString()} />
+        <FlatList
+          showsVerticalScrollIndicator={true}
+          data={this.props.data}
+          renderItem={this.renderListItem.bind(this)}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     );
   }

@@ -7,10 +7,11 @@ interface Props {
   onPress: any;
   color: string;
   text: string;
+  textSize?: number;
+  textColor?: string;
   disabled?: boolean;
   width?: any;
   height?: any;
-  textSize?: number;
 }
 export default class GenericButton extends React.PureComponent<Props> {
   render() {
@@ -19,7 +20,7 @@ export default class GenericButton extends React.PureComponent<Props> {
         style={[styles.genericButton, { backgroundColor: this.props.color, width: this.props.width, height: this.props.height }]}
         onPress={this.props.onPress}
         disabled={this.props.disabled || false}>
-        <Text style={[styles.buttonText, { fontSize: this.props.textSize }]}>{this.props.text}</Text>
+        <Text style={[styles.buttonText, { fontSize: this.props.textSize, color: this.props.textColor }]}>{this.props.text}</Text>
       </TouchableOpacity>
     );
   }

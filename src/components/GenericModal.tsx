@@ -3,6 +3,7 @@ import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './componentStyles';
+import colors from '../helpers/colors';
 
 interface Props {
   text: string;
@@ -17,10 +18,10 @@ export default class GenericModal extends React.Component<Props> {
 
   render() {
     return (
-      <Modal isVisible={this.props.isVisible}>
+      <Modal style={{ elevation: 20 }} isVisible={this.props.isVisible}>
         <View style={styles.modalViewNoConnection}>
-          <Text style={styles.modalTitle}>{this.props.text}</Text>
-          {this.props.showActivityIndicator == true ? <ActivityIndicator /> : null}
+          <Text style={styles.modalText}>{this.props.text}</Text>
+          {this.props.showActivityIndicator == true ? <ActivityIndicator size={'large'} color={colors.themeSecondary} /> : null}
         </View>
       </Modal>
     );

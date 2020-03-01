@@ -15,6 +15,8 @@ const quizReducer = (state = INITIAL_STATE, action: QuizActions) => {
   switch (action.type) {
     case types.ADD_DATA:
       return { ...state, data: action.payload };
+    case types.CHANGE_DIFFICULTY:
+      return { ...state, difficulty: action.payload };
     case types.RESTART:
       return INITIAL_STATE;
     case types.INCREMENT_RESPONSE:

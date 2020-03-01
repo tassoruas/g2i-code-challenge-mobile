@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../helpers/colors';
 import { Dimensions, PixelRatio } from 'react-native';
 
 const dimensions = {
@@ -16,14 +17,15 @@ export default StyleSheet.create({
   modalViewNoConnection: {
     height: '30%',
     width: '100%',
-    backgroundColor: '#d5d5d5',
+    backgroundColor: colors.themePrimary,
     alignItems: 'center',
     justifyContent: 'space-evenly'
   },
-  modalTitle: {
+  modalText: {
+    width: '80%',
     fontSize: 20,
     fontWeight: '400',
-    color: 'black',
+    color: colors.themeSecondary,
     textAlign: 'center'
   },
   genericButton: {
