@@ -1,1 +1,0 @@
-# Hello G2i team!

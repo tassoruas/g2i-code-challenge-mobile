@@ -39,7 +39,6 @@ interface State {
 
 class Home extends React.Component<Props, State> {
   unsubscribeInternetChecker: NetInfoSubscription;
-  _isMounted: boolean;
 
   constructor(props) {
     super(props);
@@ -51,12 +50,16 @@ class Home extends React.Component<Props, State> {
       difficultyValue: new Animated.Value(0),
       showDifficultyOptions: false
     };
-    this._isMounted = false;
+  }
+
+  componentDidMount() {
     this.unsubscribeInternetChecker = NetInfo.addEventListener(async state => {
-      if (this._isMounted == true) {
-        this.setState({ hasInternet: state.isConnected, networkErrorModalVisible: !state.isConnected });
-      }
+      this.setState({ hasInternet: state.isConnected, networkErrorModalVisible: !state.isConnected });
     });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeInternetChecker();
   }
 
   /**
@@ -64,7 +67,6 @@ class Home extends React.Component<Props, State> {
    */
   async fetchData() {
     try {
-      this._isMounted = true;
       const resp = await axios.get(
         `https://opentdb.com/api.php?amount=${this.props.quiz.answersCount}&difficulty=${this.props.quiz.difficulty}&type=boolean`,
         {
@@ -82,7 +84,7 @@ class Home extends React.Component<Props, State> {
 
       this.props.addDataAction(resp.data.results);
     } catch (error) {
-      console.error('Quiz: componentDidMount:', error);
+      console.error('Quiz: fetchData:', error);
     }
   }
 
@@ -95,11 +97,6 @@ class Home extends React.Component<Props, State> {
     const entities = new AllHtmlEntities();
     const filteredQuestion = entities.decode(question);
     return filteredQuestion;
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeInternetChecker();
-    this._isMounted = false;
   }
 
   /**

@@ -8,9 +8,6 @@ import QuizData from '../helpers/dataTypes/QuizData';
 import { connect } from 'react-redux';
 import { addDataAction, incrementResponseAction } from '../redux/actions/quizActions';
 
-// Components
-import GenericButton from '../components/GenericButton';
-
 // Styles
 import colors from '../helpers/colors';
 import styles, { QuizStyle } from './styles';
